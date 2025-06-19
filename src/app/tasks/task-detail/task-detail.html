@@ -1,0 +1,18 @@
+<section id="task-detail">
+  <header>
+    <h2>{{task()?.name}}</h2>
+
+    <menu>
+      <a [routerLink]="['./']" routerLinkActive="router-link-active"
+        >Overview</a
+      >
+
+      <a>Documents</a>
+      <a [routerLink]="['./', 'new-task']" routerLinkActive="router-link-active"
+        >Add Task</a
+      >
+    </menu>
+  </header>
+
+  <router-outlet [routerOutletData]="{task}" />
+</section>

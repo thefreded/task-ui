@@ -1,0 +1,19 @@
+<app-card>
+  @if(task()){
+  <article>
+    <menu>
+      <a
+        [routerLink]="['./', 'edit-task']"
+        routerLinkActive="router-link-active"
+        >Edit Task</a
+      >
+    </menu>
+
+    <h2>{{task().name}}</h2>
+    <time>{{ task().createdAt | date : "fullDate" }}</time>
+    <p>{{task().description}}</p>
+  </article>
+  }@else {
+  <p>Task loading...</p>
+  }
+</app-card>

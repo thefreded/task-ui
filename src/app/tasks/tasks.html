@@ -1,0 +1,9 @@
+<ul id="tasks">
+  @for(task of tasks(); track task.id){
+  <li>
+    <app-task [task]="task"></app-task>
+  </li>
+  } @empty {
+  <p>Please add a task .. Todo: add create task button</p>
+  }
+</ul>
