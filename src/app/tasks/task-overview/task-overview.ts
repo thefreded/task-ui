@@ -1,8 +1,16 @@
-import { Component, computed, inject, input, Signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  input,
+  Signal,
+} from '@angular/core';
 import { Card } from '../../shared/card/card';
-import { ROUTER_OUTLET_DATA, RouterLink } from '@angular/router';
+import { Router, ROUTER_OUTLET_DATA, RouterLink } from '@angular/router';
 import { TaskModel } from '../task/task-model';
 import { DatePipe } from '@angular/common';
+import { TaskStore } from '../task-store';
 
 @Component({
   selector: 'app-task-overview',
@@ -11,7 +19,23 @@ import { DatePipe } from '@angular/common';
   styleUrl: './task-overview.css',
 })
 export class TaskOverview {
-  #data = inject(ROUTER_OUTLET_DATA) as Signal<{ task: Signal<TaskModel> }>;
+  readonly #routerData = inject(ROUTER_OUTLET_DATA) as Signal<{
+    task: Signal<TaskModel>;
+  }>;
+  readonly #router = inject(Router);
+  readonly #taskStore = inject(TaskStore);
+  readonly #destroyRef = inject(DestroyRef);
 
-  protected task = computed(() => this.#data().task());
+  protected task = computed(() => this.#routerData().task());
+
+  protected onDeleteTask() {
+    const subscription = this.#taskStore.deleteTask(this.task().id).subscribe({
+      next: () => {
+        this.#router.navigate(['/'], { replaceUrl: true });
+      },
+      error: (error) => console.error(error),
+    });
+
+    this.#destroyRef.onDestroy(() => subscription.unsubscribe());
+  }
 }

@@ -4,32 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { concatMap, map, tap } from 'rxjs';
 import { TaskInputData } from '../shared/task-form/task-input-model';
 
-const TEST_TASK = [
-  {
-    id: '1bd6c5ce-3b9d-4136-8981-8f2aa5afc77e',
-    name: 'Task 3 Tahirweu sundaydg 4',
-    description: 'Updated Hello,fd this is a tesiing witffh Tahiru Test Task',
-    createdAt: '2025-06-15T11:05:22.426233',
-    updatedAt: '2025-06-15T11:05:22.426233',
-    createdBy: 'user',
-  },
-  {
-    id: '21492985-399d-45dc-8d6e-7338d5ac902f',
-    name: 'Task 3 Tgfgahirweu sundaydg 4',
-    description: 'Updated Hello,fd this is a tesiing witffh Tahiru Test Task',
-    createdAt: '2025-06-15T12:03:12.456295',
-    updatedAt: '2025-06-15T12:03:12.456295',
-    createdBy: 'user',
-  },
-  {
-    id: '901c5297-a952-40c4-9f5c-01e6e88901cc',
-    name: 'Task 4 Tgdffgahirweu sundaydg 4',
-    description: 'Updated Hello,fd this is a tesiing witffh Tahiru Test Task',
-    createdAt: '2025-06-15T12:03:20.617449',
-    updatedAt: '2025-06-15T12:03:20.617449',
-    createdBy: 'user',
-  },
-];
 @Injectable({
   providedIn: 'root',
 })
@@ -91,6 +65,16 @@ export class TaskStore {
         concatMap((updatedTask) => {
           this.#selectedTask.set(updatedTask);
           return this.fetchAllTasks().pipe(map(() => updatedTask));
+        })
+      );
+  }
+
+  deleteTask(taskId: string) {
+    return this.#httpClient
+      .delete(`${this.#baseURL}/${taskId}`, { responseType: 'text' })
+      .pipe(
+        concatMap((deletedTaskId) => {
+          return this.fetchAllTasks().pipe(map(() => deletedTaskId));
         })
       );
   }

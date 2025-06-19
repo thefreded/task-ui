@@ -3,7 +3,6 @@ import { TaskForm } from '../../shared/task-form/task-form';
 import { TaskInputData } from '../../shared/task-form/task-input-model';
 import { TaskStore } from '../task-store';
 import { Router } from '@angular/router';
-import { catchError, tap } from 'rxjs';
 
 @Component({
   selector: 'app-new-task',
@@ -19,7 +18,7 @@ export class NewTask {
   protected onSubmit(taskInputData: TaskInputData) {
     const subscription = this.#taskStore.addNewTask(taskInputData).subscribe({
       next: (newTask) => {
-        this.#router.navigate(['tasks', newTask.id]);
+        this.#router.navigate(['tasks', newTask.id], { replaceUrl: true });
       },
     });
 

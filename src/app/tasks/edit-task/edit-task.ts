@@ -1,10 +1,10 @@
 import {
   Component,
-  computed,
   DestroyRef,
   inject,
   input,
   OnInit,
+  signal,
 } from '@angular/core';
 import { TaskForm } from '../../shared/task-form/task-form';
 import { TaskModel } from '../task/task-model';
@@ -18,20 +18,23 @@ import { Router } from '@angular/router';
   templateUrl: './edit-task.html',
   styleUrl: './edit-task.css',
 })
-export class EditTask {
+export class EditTask implements OnInit {
   readonly task = input.required<TaskModel>();
   readonly #taskStore = inject(TaskStore);
   readonly #router = inject(Router);
   readonly #destroyRef = inject(DestroyRef);
+  protected initialTaskInput = signal<TaskInputData>({
+    name: '',
+    description: '',
+  });
 
-  protected initialTaskInput = computed(() => {
+  ngOnInit(): void {
     const task = this.task();
-
-    return {
+    this.initialTaskInput.set({
       name: task.name,
       description: task.description,
-    };
-  });
+    });
+  }
 
   protected onSubmit(taskInputData: TaskInputData) {
     const updatedTask = {

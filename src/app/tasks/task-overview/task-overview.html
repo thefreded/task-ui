@@ -2,11 +2,9 @@
   @if(task()){
   <article>
     <menu>
-      <a
-        [routerLink]="['./', 'edit-task']"
-        routerLinkActive="router-link-active"
-        >Edit Task</a
-      >
+      <a [routerLink]="['./', 'edit-task']">Edit Task</a>
+
+      <button (click)="onDeleteTask()">Delete Task</button>
     </menu>
 
     <h2>{{task().name}}</h2>

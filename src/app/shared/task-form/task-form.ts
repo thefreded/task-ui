@@ -61,7 +61,8 @@ export class TaskForm {
     if (this.form.valid) {
       const { name, description } = this.form.value;
       this.save.emit({ name, description });
-      this.form.reset();
+
+      setTimeout(() => this.form.reset());
     }
   }
 }
