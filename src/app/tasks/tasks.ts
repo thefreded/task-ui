@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { TaskStore } from './task-store';
 import { Task } from './task/task';
-import { RouterOutlet } from '@angular/router';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-tasks',
@@ -9,8 +9,17 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './tasks.html',
   styleUrl: './tasks.css',
 })
-export class Tasks {
+export class Tasks implements OnInit {
   #taskStore = inject(TaskStore);
 
   protected tasks = this.#taskStore.allTask;
+  protected isFetching = signal(false);
+
+  ngOnInit(): void {
+    this.isFetching.set(true);
+    this.#taskStore
+      .fetchAllTasks()
+      .pipe(finalize(() => this.isFetching.set(false)))
+      .subscribe();
+  }
 }

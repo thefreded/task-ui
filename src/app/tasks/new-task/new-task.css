@@ -2,3 +2,11 @@ h2 {
   margin: 0;
   color: #d0c2e1;
 }
+
+section {
+  padding: 1rem;
+  border-radius: 8px;
+  max-height: 60vh;
+  overflow: auto;
+  background-color: #3a2c54;
+}

@@ -1,17 +1,13 @@
 <app-card>
-  @if(task()){
   <article>
     <menu>
-      <a [routerLink]="['./', 'edit-task']">Edit Task</a>
+      <a [routerLink]="['./', 'edit-task']" class="icon">&#9998;</a>
 
-      <button (click)="onDeleteTask()">Delete Task</button>
+      <button (click)="onDeleteTask()" class="icon">&#10060;</button>
     </menu>
 
     <h2>{{task().name}}</h2>
     <time>{{ task().createdAt | date : "fullDate" }}</time>
     <p>{{task().description}}</p>
   </article>
-  }@else {
-  <p>Task loading...</p>
-  }
 </app-card>

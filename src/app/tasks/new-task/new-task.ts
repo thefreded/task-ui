@@ -3,10 +3,11 @@ import { TaskForm } from '../../shared/task-form/task-form';
 import { TaskInputData } from '../../shared/task-form/task-input-model';
 import { TaskStore } from '../task-store';
 import { Router } from '@angular/router';
+import { Card } from '../../shared/card/card';
 
 @Component({
   selector: 'app-new-task',
-  imports: [TaskForm],
+  imports: [TaskForm, Card],
   templateUrl: './new-task.html',
   styleUrl: './new-task.css',
 })

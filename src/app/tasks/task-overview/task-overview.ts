@@ -29,13 +29,21 @@ export class TaskOverview {
   protected task = computed(() => this.#routerData().task());
 
   protected onDeleteTask() {
-    const subscription = this.#taskStore.deleteTask(this.task().id).subscribe({
-      next: () => {
-        this.#router.navigate(['/'], { replaceUrl: true });
-      },
-      error: (error) => console.error(error),
-    });
+    const shouldDeleteTask = window.confirm(
+      `Continue with deleting task, ${this.task().name}?`
+    );
 
-    this.#destroyRef.onDestroy(() => subscription.unsubscribe());
+    if (shouldDeleteTask) {
+      const subscription = this.#taskStore
+        .deleteTask(this.task().id)
+        .subscribe({
+          next: () => {
+            this.#router.navigate(['/'], { replaceUrl: true });
+          },
+          error: (error) => console.error(error),
+        });
+
+      this.#destroyRef.onDestroy(() => subscription.unsubscribe());
+    }
   }
 }

@@ -24,16 +24,18 @@ export class TaskStore {
 
   constructor() {
     // just for learning purpose ->  to open up discussion about data resolve and data outlet
-    this.fetchAllTasks().subscribe();
+    //this.fetchAllTasks().subscribe();
   }
 
   fetchAllTasks() {
-    return this.#httpClient.get<TaskModel[]>(`${this.#baseURL}?limit=100`).pipe(
-      tap({
-        next: (tasks) => this.#tasks.set(tasks),
-        error: (error) => console.error(error),
-      })
-    );
+    return this.#httpClient
+      .get<TaskModel[]>(`${this.#baseURL}?limit=100&sortOrder=desc`)
+      .pipe(
+        tap({
+          next: (tasks) => this.#tasks.set(tasks),
+          error: (error) => console.error(error),
+        })
+      );
   }
 
   // used by resolver -> open up discussion
