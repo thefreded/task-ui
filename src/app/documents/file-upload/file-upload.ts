@@ -4,7 +4,7 @@ import {
   HttpEvent,
   HttpEventType,
 } from '@angular/common/http';
-import { Component, input, OnInit, output } from '@angular/core';
+import { Component, input, OnInit, output, signal } from '@angular/core';
 import { NgxDropzoneChangeEvent, NgxDropzoneModule } from 'ngx-dropzone';
 import {
   FileWithProgress,
@@ -39,12 +39,13 @@ export class FileUpload {
   readonly uploadError = output<string>();
   protected status = UploadStatus;
 
-  acceptedFormats =
+  protected acceptedFormats =
     '.pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.gif,.zip,.xlsx,.xls,.ppt,.pptx';
-  selectedFile: FileWithProgress | null = null;
-  uploading = false;
+  protected selectedFile: FileWithProgress | null = null;
+  //TODO: signal does not work here. Find out why
+  protected uploading = false;
 
-  onFileSelected(event: NgxDropzoneChangeEvent) {
+  protected onFileSelected(event: NgxDropzoneChangeEvent) {
     if (event.addedFiles && event.addedFiles.length > 0) {
       this.selectedFile = {
         file: event.addedFiles[0],
@@ -54,15 +55,15 @@ export class FileUpload {
     }
   }
 
-  removeFile() {
+  protected removeFile() {
     this.selectedFile = null;
   }
 
-  clearFile() {
+  protected clearFile() {
     this.selectedFile = null;
   }
 
-  async uploadFile() {
+  protected async uploadFile() {
     if (!this.selectedFile || !this.uploadObservable) return;
 
     this.uploading = true;
@@ -72,7 +73,7 @@ export class FileUpload {
       formData.append('file', this.selectedFile.file);
 
       const upload$ = this.uploadObservable()(formData);
-      await this.uploadSingleFile(this.selectedFile, upload$);
+      await this.#uploadSingleFile(this.selectedFile, upload$);
     } catch (error) {
       console.error('Upload error:', error);
     } finally {
@@ -80,7 +81,7 @@ export class FileUpload {
     }
   }
 
-  private uploadSingleFile(
+  #uploadSingleFile(
     fileItem: FileWithProgress,
     uploadObservable: Observable<HttpEvent<UploadResponse>>
   ): Promise<UploadResponse> {
@@ -102,7 +103,7 @@ export class FileUpload {
         },
         error: (error) => {
           fileItem.status = UploadStatus.Error;
-          fileItem.error = this.getErrorMessage(error);
+          fileItem.error = this.#getErrorMessage(error);
           this.uploadError.emit(
             `Failed to upload ${fileItem.file.name}: ${fileItem.error}`
           );
@@ -112,14 +113,14 @@ export class FileUpload {
     });
   }
 
-  formatAcceptedTypes(): string {
+  protected formatAcceptedTypes(): string {
     return this.acceptedFormats
       .split(',')
       .map((type) => type.replace('.', '').toUpperCase())
       .join(', ');
   }
 
-  private getErrorMessage(error: HttpErrorResponse): string {
+  #getErrorMessage(error: HttpErrorResponse): string {
     if (error.error?.message) return error.error.message;
     if (error.message) return error.message;
     return `HTTP ${error.status}: ${error.statusText}`;
