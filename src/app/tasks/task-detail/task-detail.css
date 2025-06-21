@@ -38,6 +38,7 @@ menu a {
   padding: 0.35rem 0.8rem;
   font-size: 0.9rem;
   text-decoration: none;
+  margin-right: 10px;
 }
 
 menu a:hover,

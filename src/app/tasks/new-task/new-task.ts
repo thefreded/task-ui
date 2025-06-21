@@ -7,7 +7,7 @@ import { Card } from '../../shared/card/card';
 
 @Component({
   selector: 'app-new-task',
-  imports: [TaskForm, Card],
+  imports: [TaskForm],
   templateUrl: './new-task.html',
   styleUrl: './new-task.css',
 })

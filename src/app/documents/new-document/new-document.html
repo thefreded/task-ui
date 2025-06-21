@@ -1,0 +1,6 @@
+<app-file-upload
+  [maxFileSize]="5242880"
+  [uploadObservable]="uploadFileObservable"
+  (fileUploaded)="onFileUploaded($event)"
+  (uploadError)="onUploadError($event)"
+/>

@@ -21,7 +21,7 @@ export const provideKeycloakInitConfig = () =>
     features: [
       withAutoRefreshToken({
         onInactivityTimeout: 'logout',
-        sessionTimeout: 60000,
+        sessionTimeout: 1200000,
       }),
     ],
     providers: [AutoRefreshTokenService, UserActivityService],

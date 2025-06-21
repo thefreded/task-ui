@@ -1,0 +1,32 @@
+.documents-table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+}
+
+.documents-table th,
+.documents-table td {
+  text-align: left;
+  padding: 10px 10px 10px 0px;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.clickable:hover,
+a:hover {
+  color: #1a0c2d;
+  transform: scale(1.01);
+}
+
+section {
+  padding: 1rem;
+  color: #25113d;
+  background-color: #bf9ee5;
+}
+
+a {
+  text-decoration: none;
+}
