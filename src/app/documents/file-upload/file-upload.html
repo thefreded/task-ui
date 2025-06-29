@@ -1,0 +1,146 @@
+<div class="file-upload-container">
+  <h3>Upload Documents</h3>
+
+  <!-- Dropzone -->
+  <ngx-dropzone
+    [accept]="acceptedFormats"
+    [maxFileSize]="maxFileSize()"
+    [multiple]="false"
+    [disabled]="uploading"
+    (change)="onFileSelected($event)"
+    class="custom-dropzone"
+  >
+    <ngx-dropzone-label>
+      <div class="dropzone-content">
+        <h4>Drop a file here or click to browse</h4>
+        <p class="upload-hint">
+          Supported formats: {{ formatAcceptedTypes() }}<br />
+        </p>
+        <p class="upload-hint">
+          Maximum file size: {{ maxFileSize() | formatFileSize }}
+        </p>
+        <p class="upload-hint">Only one file can be uploaded at a time</p>
+      </div>
+    </ngx-dropzone-label>
+
+    <!-- File Preview -->
+    @if (selectedFile) {
+    <ngx-dropzone-preview
+      [removable]="selectedFile.status !== 'uploading'"
+      (removed)="removeFile()"
+      class="preview-wrapper"
+    >
+      <ngx-dropzone-label>
+        <div class="file-preview-content">
+          <div class="file-info">
+            <div class="file-icon" [appFileIcon]="selectedFile.file.name"></div>
+            <div class="file-details">
+              <div class="file-name" [title]="selectedFile.file.name">
+                {{ selectedFile.file.name |truncateFileName: 20 }}
+              </div>
+              <div class="file-size">
+                {{ selectedFile.file.size | formatFileSize }}
+              </div>
+            </div>
+            <div class="file-status">
+              <div class="status-indicator">
+                @switch (selectedFile.status) { @case ('pending') {
+                <span class="status-pending">⏳</span>
+                } @case ('uploading') {
+                <span class="status-uploading">⏳</span>
+                } @case ('success') {
+                <span class="status-success">✅</span>
+                } @case ('error') {
+                <span class="status-error">❌</span>
+                } }
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          @if (selectedFile.status === 'uploading') {
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div
+                class="progress-fill"
+                [style.width.%]="selectedFile.progress"
+              ></div>
+            </div>
+            <div class="progress-text">{{ selectedFile.progress }}%</div>
+          </div>
+          }
+
+          <!-- Error Message -->
+          @if (selectedFile.status === 'error' && selectedFile.error) {
+          <div class="error-message">{{ selectedFile.error }}</div>
+          }
+
+          <!-- Success Message -->
+          @if (selectedFile.status === 'success') {
+          <div class="success-message">Upload completed successfully!</div>
+          }
+        </div>
+      </ngx-dropzone-label>
+    </ngx-dropzone-preview>
+    }
+  </ngx-dropzone>
+
+  <!-- Upload Actions -->
+  @if (selectedFile) {
+  <div class="upload-actions">
+    <button
+      class="btn btn-primary"
+      (click)="uploadFile()"
+      [disabled]="uploading || selectedFile.status !== 'pending'"
+    >
+      <span class="btn-content">
+        @if (!uploading) {
+        <span>Upload File</span>
+        } @else {
+        <span>Uploading... {{ selectedFile.progress }}%</span>
+        }
+      </span>
+    </button>
+
+    <button
+      class="btn btn-secondary"
+      (click)="clearFile()"
+      [disabled]="uploading"
+    >
+      Remove File
+    </button>
+
+    @if (selectedFile.status === 'success') {
+    <button
+      class="btn btn-success"
+      (click)="clearFile()"
+      [disabled]="uploading"
+    >
+      Upload Another
+    </button>
+    }
+  </div>
+  }
+
+  <!-- Upload Status -->
+  @if (selectedFile) {
+  <div class="upload-summary">
+    <div class="summary-stats">
+      <span class="stat">
+        File: <strong>{{ selectedFile.file.name }}</strong>
+      </span>
+      <span class="stat">
+        Size: <strong>{{ selectedFile.file.size | formatFileSize }}</strong>
+      </span>
+      @if (selectedFile.status !== 'pending') {
+      <span class="stat">
+        Status:
+        <strong [class]="'status-' + selectedFile.status"
+          >{{ selectedFile.status | titlecase }}</strong
+        >
+      </span>
+      }
+    </div>
+  </div>
+  }
+</div>

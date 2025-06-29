@@ -1,0 +1,24 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
+  <p>
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" formControlName="name" />
+  </p>
+
+  <p>
+    <label for="description">Description</label>
+    <textarea
+      id="description"
+      rows="5"
+      name="description"
+      formControlName="description"
+    ></textarea>
+  </p>
+
+  <p class="actions">
+    <a [routerLink]="['../']">Cancel</a>
+    <button type="submit">Create</button>
+  </p>
+  @if(isInValidInputs){
+  <p>ERROR: {{errors}}</p>
+  }
+</form>

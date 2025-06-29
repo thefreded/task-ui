@@ -1,0 +1,6 @@
+<div>
+  <a [routerLink]="['/tasks', task().id]" routerLinkActive="selected">
+    <img src="task-placeholder.png" alt="task logo" />
+    <span>{{ task().name | truncate }}</span>
+  </a>
+</div>
