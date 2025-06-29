@@ -108,7 +108,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ secrets.DOCKER_USERNAME }}/task-app-ui
+            ${{ secrets.DOCKER_USER }}/task-app-ui
             ghcr.io/${{ github.repository }}
           tags: |
             type=ref,event=branch
