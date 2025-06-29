@@ -111,7 +111,6 @@ jobs:
             ${{ secrets.DOCKER_USER }}/task-app-ui
             ghcr.io/${{ github.repository }}
           tags: |
-            type=ref,event=branch
             type=raw,value=${{ steps.bump_version.outputs.version }}
             type=raw,value=latest,enable={{is_default_branch}}
 
