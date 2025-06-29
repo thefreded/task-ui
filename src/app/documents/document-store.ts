@@ -10,7 +10,7 @@ import { UploadResponse } from './file-upload/file-upload-model';
 export class DocumentStore {
   #documents = signal<DocumentModel[]>([]);
 
-  readonly #baseURL = 'http://gateway:8086/api/gateway/document';
+  readonly #baseURL = 'http://localhost:8086/api/gateway/document';
   readonly #httpClient = inject(HttpClient);
 
   get allDocuments() {

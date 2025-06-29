@@ -11,7 +11,7 @@ export class TaskStore {
   #tasks = signal<TaskModel[]>([]);
   #selectedTask = signal<TaskModel | null>(null);
 
-  readonly #baseURL = 'http://gateway:8086/api/gateway/tasks';
+  readonly #baseURL = 'http://localhost:8086/api/gateway/tasks';
   readonly #httpClient = inject(HttpClient);
 
   get allTask() {

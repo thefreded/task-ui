@@ -28,7 +28,7 @@ export const provideKeycloakInitConfig = () =>
   });
 
 const urlCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
-  urlPattern: /^(http:\/\/gateway:8086)(\/.*)?$/i,
+  urlPattern: /^(http:\/\/localhost:8086)(\/.*)?$/i,
   bearerPrefix: 'Bearer',
 });
 
