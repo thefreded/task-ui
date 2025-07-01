@@ -1,47 +1,47 @@
+# =========================================
+# Stage 1: Build the Angular Application
+# =========================================
+# =========================================
+# Stage 1: Build the Angular Application
+# =========================================
+ARG NODE_VERSION=22.14.0-alpine
+ARG NGINX_VERSION=alpine3.21
 
-FROM node:20-alpine AS build
+# Use a lightweight Node.js image for building (customizable via ARG)
+FROM node:${NODE_VERSION} AS builder
 
-
+# Set the working directory inside the container
 WORKDIR /app
 
-# copy without lock because of private reg issue.
-COPY package.json ./
+# Copy package-related files first to leverage Docker's caching mechanism
+COPY package.json package-lock.json ./
 
-# Reset npm registry to public registry and clear any cached auth
-RUN npm config set registry https://registry.npmjs.org/ && \
-    npm config delete //registry.npmjs.org/:_authToken || true && \
-    npm cache clean --force
+# Install project dependencies using npm ci (ensures a clean, reproducible install)
+RUN --mount=type=cache,target=/root/.npm npm ci
 
+# Copy the rest of the application source code into the container
+COPY . .
 
-RUN npm install
+# Build the Angular application
+RUN npm run build 
 
+# =========================================
+# Stage 2: Prepare Nginx to Serve Static Files
+# =========================================
 
-COPY package.json angular.json tsconfig*.json ./
-COPY src ./src
-COPY public ./public
+FROM nginxinc/nginx-unprivileged:${NGINX_VERSION} AS runner
 
+# Use a built-in non-root user for security best practices
+USER nginx
 
-RUN npx ng build
+# Copy custom Nginx config
+COPY nginx.conf /etc/nginx/nginx.conf
 
+# Copy the static build output from the build stage to Nginx's default HTML serving directory
+COPY --chown=nginx:nginx --from=builder /app/dist/*/browser /usr/share/nginx/html
 
-FROM nginx:alpine
+EXPOSE 4400
 
-
-COPY --from=build /app/dist/* /usr/share/nginx/html/
-
-# Create nginx config for Angular SPA routing
-RUN echo 'server { \
-    listen 80; \
-    server_name localhost; \
-    root /usr/share/nginx/html; \
-    index index.html; \
-    location / { \
-        try_files $uri $uri/ /index.html; \
-    } \
-}' > /etc/nginx/conf.d/default.conf
-
-# Expose port 80
-EXPOSE 80
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start Nginx directly with custom config
+ENTRYPOINT ["nginx", "-c", "/etc/nginx/nginx.conf"]
+CMD ["-g", "daemon off;"]
