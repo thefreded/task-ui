@@ -1,0 +1,13 @@
+<app-card>
+  <article>
+    <menu>
+      <a [routerLink]="['./', 'edit-task']" class="icon">&#9998;</a>
+
+      <button (click)="onDeleteTask()" class="icon">❌</button>
+    </menu>
+
+    <h2>{{task().name}}</h2>
+    <time>{{ task().createdAt | date : "fullDate" }}</time>
+    <p>{{task().description}}</p>
+  </article>
+</app-card>

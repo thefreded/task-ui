@@ -1,0 +1,35 @@
+<app-card>
+  <section>
+    <a
+      [routerLink]="['../', 'new-document']"
+      routerLinkActive="router-link-active"
+      >📤 Upload</a
+    >
+    @if(documents().length){
+    <table class="documents-table">
+      <thead>
+        <tr>
+          <th>Doc name</th>
+          <th>Type</th>
+          <th>Uploaded at</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(doc of documents(); track doc.id){
+        <tr class="document-row">
+          <td (click)="onViewDocument(doc.id)" class="clickable">
+            {{ doc.fileName | truncateFileName }}
+          </td>
+          <td [appFileIcon]="doc.fileName "></td>
+          <td>{{ doc.createdAt | date:'short' }}</td>
+          <td (click)="onDeleteDocument(doc.id)" class="clickable">❌</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    }@else {
+    <p>No document available</p>
+    }
+  </section>
+</app-card>

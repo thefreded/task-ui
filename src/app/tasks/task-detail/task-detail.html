@@ -1,0 +1,21 @@
+<section id="task-detail">
+  @if( !isFetching() && task()){
+  <header>
+    <h2>{{task()?.name}}</h2>
+
+    <menu>
+      <a [routerLink]="['./']" routerLinkActive="router-link-active"
+        >Overview</a
+      >
+
+      <a [routerLink]="['documents']">Documents</a>
+    </menu>
+  </header>
+
+  <router-outlet [routerOutletData]="{task}" />
+  }@else if (!isFetching() && !task()) {
+  <p>Cannot load task with id {{taskId()}}. Kindly verify task Id</p>
+  } @else if (isFetching() && !task()) {
+  <p>Loading task with id {{taskId()}}</p>
+  }
+</section>
